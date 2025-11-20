@@ -5,6 +5,9 @@ import reactPlugin from "eslint-plugin-react";
 
 /** @type {import("eslint").Linter.Config[]} */
 export default [
+  {
+    ignores: ["api/**"],
+  },
   js.configs.recommended,
   {
     ...reactPlugin.configs.flat.recommended,
@@ -30,7 +33,5 @@ export default [
       "react/prop-types": "off",
     },
   },
-
-
   prettier,
 ]
