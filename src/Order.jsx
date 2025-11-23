@@ -50,7 +50,7 @@ export default function Order() {
 
   return (
     <div className="order-page">
-      <div>
+      <div className="order">
         <h2>Create order</h2>
         <form onSubmit={(e)=> {
           e.preventDefault();
@@ -109,8 +109,8 @@ export default function Order() {
                   <label htmlFor="size-l">Large</label>
                 </span>
               </div>
-              <button type="submit">Add to cart</button>
             </div>
+            <button type="submit">Add to Cart</button>
           </div>
           <div className="order-pizza">
             <Pizza
