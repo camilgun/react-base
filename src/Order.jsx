@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import Pizza from "./Pizza";
-import Chart from "./Chart";
+import Cart from "./Cart";
 
 const intl = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -11,12 +11,25 @@ export default function Order() {
   const [pizzaTypes, setPizzaTypes] = useState([]);
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState("M");
-  const [chart, setCart] = useState([]);
+  const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const pizzaMap = useMemo(() => new Map(pizzaTypes.map((p) => [p.id, p]) ), [pizzaTypes]);
   const selectedPizza = pizzaMap.get(pizzaType);
   const price = selectedPizza ? selectedPizza.sizes[pizzaSize] : 0;
+
+  async function checkout() {
+    setLoading(true);
+    await fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify( { cart } ),
+    });
+    setCart([]);
+    setLoading(false);
+  }
 
   async function fetchPizzaTypes() {
     const pizzaRes = await fetch("/api/pizzas");
@@ -40,7 +53,7 @@ export default function Order() {
         <h2>Create order</h2>
         <form onSubmit={(e)=> {
           e.preventDefault();
-          setCart([...chart, {pizza: selectedPizza, size: pizzaSize}])
+          setCart([...cart, {pizza: selectedPizza, size: pizzaSize}])
         }}>
           <div>
             <div>
@@ -108,7 +121,7 @@ export default function Order() {
           </div>
         </form>
       </div>
-      <Chart chart={chart} />
+      <Cart cart={cart} checkout={checkout} />
     </div>
   );
 }

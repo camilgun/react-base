@@ -3,10 +3,10 @@ const intl = new Intl.NumberFormat("en-US", {
   currency: "EUR",
 });
 
-export default function Chart({ chart, checkout }) {
+export default function Chart({ cart, checkout }) {
   let total = 0;
-  for (let i = 0; i < chart.length; i++) {
-    const current = chart[i];
+  for (let i = 0; i < cart.length; i++) {
+    const current = cart[i];
     total += current.pizza.sizes[current.size];
   }
 
@@ -14,7 +14,7 @@ export default function Chart({ chart, checkout }) {
     <div className="chart">
       <h2>Chart</h2>
       <ul>
-        {chart.map((item, index) => (
+        {cart.map((item, index) => (
           <li key={index}>
             <span className="size">{item.size}</span> -
             <span className="type">{item.pizza.name}</span> -

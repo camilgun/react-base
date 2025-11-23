@@ -161,6 +161,7 @@ server.post("/api/order", async function createOrder(req, res) {
   const date = now.toISOString().split("T")[0];
 
   if (!cart || !Array.isArray(cart) || cart.length === 0) {
+    console.log("Invalid order data:", cart);
     res.status(400).send({ error: "Invalid order data" });
     return;
   }
