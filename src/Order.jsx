@@ -1,5 +1,5 @@
 import Pizza from "./Pizza";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const intl = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -12,13 +12,9 @@ export default function Order() {
   const [pizzaSize, setPizzaSize] = useState("M");
   const [loading, setLoading] = useState(true);
 
-  let price, selectedPizza;
-
-  if (!loading) {
-    selectedPizza = pizzaTypes.find((pizza) => pizza.id === pizzaType);
-    price = selectedPizza ? selectedPizza.sizes[pizzaSize] : 0;
-  }
-
+  const pizzaMap = useMemo(() => new Map(pizzaTypes.map((p) => [p.id, p]) ), [pizzaTypes]);
+  const selectedPizza = pizzaMap.get(pizzaType);
+  const price = selectedPizza ? selectedPizza.sizes[pizzaSize] : 0;
 
   async function fetchPizzaTypes() {
     const pizzaRes = await fetch("/api/pizzas");
