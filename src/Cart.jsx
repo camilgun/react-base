@@ -18,7 +18,9 @@ export default function Cart({ cart, checkout }) {
           <li key={index}>
             <span className="size">{item.size}</span> -
             <span className="type">{item.pizza.name}</span> -
-            <span className="price">{intl.format(item.pizza.sizes[item.size])}</span>
+            <span className="price">
+              {intl.format(item.pizza.sizes[item.size])}
+            </span>
           </li>
         ))}
       </ul>

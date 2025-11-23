@@ -13,4 +13,4 @@ export const usePizzaOfTheDay = () => {
   }, []);
 
   return pizzaOfTheDay;
-}
+};

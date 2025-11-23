@@ -1,21 +1,29 @@
 import { useState, useEffect, useMemo, useContext } from "react";
-import Pizza from "./Pizza";
-import Cart from "./Cart";
-import { CartContext } from "./contexts";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import Pizza from "../Pizza";
+import Cart from "../Cart";
+import { CartContext } from "../contexts";
+
+export const Route = createLazyFileRoute("/order")({
+  component: Order,
+});
 
 const intl = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "EUR",
 });
 
-export default function Order() {
+function Order() {
   const [pizzaTypes, setPizzaTypes] = useState([]);
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState("M");
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useContext(CartContext);
 
-  const pizzaMap = useMemo(() => new Map(pizzaTypes.map((p) => [p.id, p]) ), [pizzaTypes]);
+  const pizzaMap = useMemo(
+    () => new Map(pizzaTypes.map((p) => [p.id, p])),
+    [pizzaTypes],
+  );
   const selectedPizza = pizzaMap.get(pizzaType);
   const price = selectedPizza ? selectedPizza.sizes[pizzaSize] : 0;
 
@@ -26,7 +34,7 @@ export default function Order() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify( { cart } ),
+      body: JSON.stringify({ cart }),
     });
     setCart([]);
     setLoading(false);
@@ -47,15 +55,16 @@ export default function Order() {
     return <div>Loading...</div>;
   }
 
-
   return (
     <div className="order-page">
       <div className="order">
         <h2>Create order</h2>
-        <form onSubmit={(e)=> {
-          e.preventDefault();
-          setCart([...cart, {pizza: selectedPizza, size: pizzaSize}])
-        }}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setCart([...cart, { pizza: selectedPizza, size: pizzaSize }]);
+          }}
+        >
           <div>
             <div>
               <label htmlFor="pizza-type">Pizza Type</label>
